@@ -3,8 +3,8 @@ from Bio.SeqIO.FastaIO import SimpleFastaParser
 sequences = []
 
 # Builds list of sequence dictionaries 
-with open('immune_proteins.fasta', 'r') as f:
-    for header, sequence in SimpleFastaParser(f):
+with open('immune_proteins.fasta', 'r') as infile:
+    for header, sequence in SimpleFastaParser(infile):
         parts = header.split("|")
         entry = {
             "accession": parts[1], 
@@ -34,7 +34,6 @@ for seq in sequences:
     elif seq['length'] < shortest_length:
         shortest_length = seq['length']
         shortest_seq = seq
-
 
 
 # Print outputs 
