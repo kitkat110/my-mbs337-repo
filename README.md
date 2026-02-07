@@ -6,9 +6,9 @@ The goal of this class is to develop essential computational skills for modern b
 
 ## Repository Organization
 ```
-├── homework01/    # Weekly homework assignment 1
 ├── homework02/    # Weekly homework assignment 2
-├── homework03/
+├── homework03/    # Weekly homework assignment 3
+├── homework04/
 ├── ...
 ├── projects/      # Larger, multi-week course projects
 └── README.md
