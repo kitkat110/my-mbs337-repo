@@ -47,17 +47,17 @@ def parse_cif(input_file: str, structure_id: str) -> object:
     Returns:
         structure: A single mmCIF protein structure produced by BioPython's mmCIF parser
     """
+    logging.info(f'Starting parse of {input_file}')
+
     parser = MMCIFParser()
-    
-    with open(input_file, 'r') as infile:
-        try:
+    try:
+        with open(input_file, 'r') as infile:
             structure = parser.get_structure(structure_id, infile)
-            logging.info(f'Successfully loaded {input_file}')
-            
-            return structure
-        except FileNotFoundError:
-            logging.error(f'Could not open input file {input_file}')
-        
+        logging.info(f'Successfully loaded {input_file}')
+        return structure
+
+    except FileNotFoundError:
+        logging.error(f'Could not open input file {input_file}')
         return None
 
 def count_res_chains(structure: object) -> dict:
@@ -71,17 +71,18 @@ def count_res_chains(structure: object) -> dict:
     Returns:
         chain_res_counts: A dictionary of the chains' residue counts
     """
-    logging.debug(f'Counting chain residues of {structure}')
+    logging.info(f'Counting chain residues of {structure}')
 
     chain_res_counts = {"chains": []}
 
     for model in structure:
         for chain in model:
+            logging.debug(f'Processing chain {chain.get_id()}')
             total_residues = 0
             hetero_res_count = 0
             standard_residues = 0
 
-            for residue in chain: 
+            for residue in chain:
                 total_residues += 1
 
                 hetfield, resseq, icode = residue.get_id()
@@ -111,10 +112,15 @@ def write_summary_to_json(count_summary: dict, output_file: str) -> None:
     Returns:
         None: This function does not return a value; it writes output to disk
     """
-    with open(output_file, 'w') as outfile:
-        json.dump(count_summary, outfile, indent=2)
+    try:
+        logging.info(f'Writing summary to {output_file}')
+
+        with open(output_file, 'w') as outfile:
+            json.dump(count_summary, outfile, indent=2)
 
         logging.info(f'Successfully wrote summary to {output_file}')
+    except Exception as e:
+        logging.error(f'Failed to write JSON file: {e}')
 
 def main():
     """
