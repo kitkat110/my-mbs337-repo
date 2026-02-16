@@ -8,9 +8,9 @@ The goal of this class is to develop essential computational skills for modern b
 ```
 ├── homework02/    # Weekly homework assignment 2
 ├── homework03/    # Weekly homework assignment 3
-├── homework04/
+├── homework04/    # Weekly homework assignment 4
+├── homework05/    # Weekly homework assignment 5
 ├── ...
-├── projects/      # Larger, multi-week course projects
 └── README.md
 ```
 
