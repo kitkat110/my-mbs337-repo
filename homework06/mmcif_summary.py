@@ -1,35 +1,56 @@
+#!/usr/bin/env python3
+
 import json
 from Bio.PDB.MMCIFParser import MMCIFParser
 import argparse
 import logging
 import socket
+import os
 
 
 # -------------------------
-# Constants (configuration)
+# Argument Parsing
 # -------------------------
-CIF_FILE = "4HHB.cif"
-STRUCTURE_ID = "hemoglobin"
-JSON_FILE = "4HHB_summary.json"
+parser = argparse.ArgumentParser(
+    description = "Parse an mmCIF file and summarize residue counts per chain."
+)
+
+parser.add_argument(
+    "input_cif",
+    type=str,
+    help="Path to input mmCIF file"
+)
+
+parser.add_argument(
+    "output_json",
+    type=str,
+    help="Path to output JSON summary file"
+)
+
+parser.add_argument(
+    "structure_id",
+    type=str,
+    help="Structure ID to assign to the parsed structure"
+)
+
+parser.add_argument(
+    "-l", "--loglevel",
+    type=str,
+    default="WARNING",
+    help="Set log level to DEBUG, INFO, WARNING, ERROR, or CRITICAL"
+)
+
+args = parser.parse_args()
 
 
 # -------------------------
 # Logging setup
 # -------------------------
-log_parser = argparse.ArgumentParser()
-log_parser.add_argument(
-    '-l', '--loglevel',
-    type=str,
-    required=False,
-    default='WARNING',
-    help='set log level to DEBUG, INFO, WARNING, ERROR, or CRITICAL'
-)
-args = log_parser.parse_args()
-
 format_str = (
     f'[%(asctime)s {socket.gethostname()}] '
     '%(filename)s:%(funcName)s:%(lineno)s - %(levelname)s: %(message)s'
 )
+
 logging.basicConfig(level=args.loglevel, format=format_str)
 
 
@@ -132,9 +153,13 @@ def main():
     Returns:
         None: This function does not return a value
     """
-    structure = parse_cif(CIF_FILE, STRUCTURE_ID)
+    structure = parse_cif(args.input_cif, args.structure_id)
+
+    if structure is None:
+        logging.error("Strutue parsing failed. Exiting.")
+    
     summary = count_res_chains(structure)
-    write_summary_to_json(summary, JSON_FILE)
+    write_summary_to_json(summary, args.output_json)
 
     logging.info(f'MMCIF summary workflow complete')
 
