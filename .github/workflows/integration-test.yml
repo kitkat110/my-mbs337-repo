@@ -4,6 +4,9 @@ on: [push]
 jobs:
   integration-tests-with-pytest:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: homework08
 
     steps:
     - name: Check out repo
