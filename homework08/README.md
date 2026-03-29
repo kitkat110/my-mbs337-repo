@@ -74,16 +74,17 @@ make compose-down-staging
 ## GitHub Actions Workflows
 Both workflow files are located in `.github/workflows/` at the root of the repository.
 
-### `integration-test.yml`
+`integration-test.yml`
+
 **Trigger:** Every push to the repository
 
 Starts the app with Docker Compose, runs `pytest` against `test/test_app.py`, then tears the container down. This catches regressions automatically on every push before code can be merged or deployed.
 
-### `push-to-registry.yml`
+`push-to-registry.yml`
+
 **Trigger:** A new Git tag is pushed (e.g. `git tag v1.0.0 && git push --tags`)
 
 Builds the Docker image and pushes it to the GitHub Container Registry (GHCR) tagged with the release version. This automates publishing — tagging a commit is all it takes to release a new versioned image.
 
 ## AI Usage
-Claude (Anthropic) was used to assist with:
-- Writing this README
+Claude (Anthropic) was used to assist with writing this README
